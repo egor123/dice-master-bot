@@ -28,7 +28,6 @@ def add_category_commands(bot):
         await ctx.respond(f"Creating category \"{name}\"...")
         templ = discord.utils.get(ctx.guild.categories, name=TEMPLATE_CATEGORY)
         (templ_pc_role, templ_dm_role) = get_category_roles(ctx, TEMPLATE_CATEGORY)
-        print(templ_pc_role, templ_dm_role)
         pc_role = await clone_role(ctx, templ_pc_role, f"{name}-PC")
         dm_role = await clone_role(ctx, templ_dm_role, f"{name}-DM")
         await ctx.user.add_roles(pc_role)
