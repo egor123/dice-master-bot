@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: dice-master-bot
 on:
   push:
     branches:
