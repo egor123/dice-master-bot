@@ -1,11 +1,11 @@
 import discord
 from discord.ext import commands
-from utils import ConfirmationModal, DateModal, is_campaign_category, get_category_roles
-
+from utils import is_campaign_category, get_category_roles
+from ui import ConfirmationModal, DateModal
 
 def add_schedule_command(bot):
-    empty_option = discord.SelectOption(label="Empty",
-                                        description="Press \"📅Add date\"")
+    empty_option = discord.SelectOption(
+        label="Empty", description="Press \"📅Add date\"")
     # TODO Timizones!!!!!!!!!!
 
     class ScheduleView(discord.ui.View):
@@ -100,11 +100,13 @@ def add_schedule_command(bot):
     async def schedule(ctx: discord.ApplicationContext, event: str, required_votes: int, description: str):
         (pc_role,) = get_category_roles(ctx, roles=["PC"])
         if required_votes == 0:
-            required_votes = len(pc_role.members)
+            required_votes = len(pc_role.members) #FIXME
+        if not description:
+            description = "new event"
         embed = discord.Embed(
             title=f"***{event}***",
             type='rich',
-            description=f"`🎲🎲🎲{'new event'.center(42)}🎲🎲🎲`",
+            description=f"`🎲🎲🎲{description.center(42)}🎲🎲🎲`",
             color=discord.Colour.blurple()
         )
         await ctx.respond(f"{pc_role.mention}", embed=embed)
