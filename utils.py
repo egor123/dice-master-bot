@@ -5,8 +5,11 @@ from confiq import MAIN_CATEGORY, TEMPLATE_CATEGORY, ADMIN_ROLES
 
 def get_category_roles(ctx: discord.ApplicationContext, category: str = None, roles=["PC", "DM"]):
     category = ctx.channel.category.name if category is None else category
-    return tuple([discord.utils.get(ctx.guild.roles, name=f"{category}-{role}") for role in roles])
+    droles = tuple([discord.utils.get(ctx.guild.roles, name=f"{category}-{role}") for role in roles])
+    return droles
 
+def get_category_roles_names(ctx: discord.ApplicationContext, category: str = None, roles=["PC", "DM"]):
+    return [ role.name for role in get_category_roles(ctx, category, roles)]
 
 async def is_campaign_category(ctx: discord.ApplicationContext):
     return any(get_category_roles(ctx))

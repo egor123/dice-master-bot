@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from utils import AllowedCategoryConverter, get_category_roles, is_campaign_category, is_not_campaign_category, has_roles
+from utils import AllowedCategoryConverter, get_category_roles, get_category_roles_names, is_campaign_category, is_not_campaign_category, has_roles
 from confiq import MAIN_CATEGORY, TEMPLATE_CATEGORY, ADMIN_ROLES, TRUSTED_ROLES
 
 
@@ -69,7 +69,7 @@ def add_category_commands(bot):
 
     @bot.slash_command(description="Invites/removes users from category")
     @commands.check(is_campaign_category)
-    @commands.check(lambda ctx: has_roles(ctx.user, [*ADMIN_ROLES, *get_category_roles(ctx, roles=["DM"])]))
+    @commands.check(lambda ctx: has_roles(ctx.user, [*ADMIN_ROLES, *get_category_roles_names(ctx, roles=["DM"])]))
     @discord.option("user")
     @discord.option("action", choices=["add_role", "remove_role"])
     @discord.option("role", choices=["PC", "DM"])
