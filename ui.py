@@ -1,13 +1,14 @@
 import discord
 from datetime import datetime
+from discord.ui import InputText, Modal
 
-class ConfirmationModal(discord.ui.Modal):
+
+class ConfirmationModal(Modal):
     def __init__(self, *args, **kwargs) -> None:
         self.confirmation = kwargs.pop('confirmation')
         self.resolve = kwargs.pop('resolve')
         super().__init__(*args, **kwargs)
-        self.add_item(discord.ui.InputText(
-            label=f"Enter \"{self.confirmation}\""))
+        self.add_item(InputText(label=f"Enter \"{self.confirmation}\""))
 
     async def callback(self, interaction):
         if (self.children[0].value == self.confirmation):
@@ -17,14 +18,14 @@ class ConfirmationModal(discord.ui.Modal):
             await interaction.response.defer()
 
 
-class DateModal(discord.ui.Modal):
+class DateModal(Modal):
     # TODO TIMEZONES??????!!!!!!!!!!!!!!!!!
     def __init__(self, *args, **kwargs) -> None:
         self.resolve = kwargs.pop('resolve')
         super().__init__(*args, **kwargs)
-        self.add_item(discord.ui.InputText(label="Date \"%d.%m.%Y\"",
+        self.add_item(InputText(label="Date \"%d.%m.%Y\"",
                       value=datetime.now().strftime("%d.%m.%Y")))
-        self.add_item(discord.ui.InputText(label="Time \"%H.%M\"",
+        self.add_item(InputText(label="Time \"%H.%M\"",
                       value=datetime.now().strftime("%H.%M")))
 
     async def callback(self, interaction):
@@ -34,4 +35,22 @@ class DateModal(discord.ui.Modal):
             date = f"({stamp.strftime('%a')}) {date}"
             await self.resolve(interaction, date)
         except:
+            await interaction.response.defer()
+
+
+class TextInputModal(discord.ui.Modal):
+    def __init__(self, *args, **kwargs) -> None:
+        self.resolve = kwargs.pop('resolve')
+        fields = kwargs.pop('fields')
+        super().__init__(*args, **kwargs)
+        for field in fields:
+            self.add_item(InputText(label=field, required=False))
+
+    async def callback(self, interaction):
+        if self.resolve is not None:
+            values = []
+            for child in self.children:
+                values.append(child.value)
+            await self.resolve(interaction, *values)
+        else:
             await interaction.response.defer()

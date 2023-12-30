@@ -4,6 +4,7 @@ import os
 from rollcommand import add_roll_command
 from campaignscommands import add_category_commands
 from schedulecommand import add_schedule_command
+from todocommand import add_todo_command
 from confiq import add_confiq
 
 intents = discord.Intents.default()
@@ -13,6 +14,7 @@ bot = discord.Bot(intents=intents)
 add_roll_command(bot)
 add_schedule_command(bot)
 add_category_commands(bot)
+add_todo_command(bot)
 
 add_confiq(bot)
 
